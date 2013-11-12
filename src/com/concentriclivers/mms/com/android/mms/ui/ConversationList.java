@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -39,6 +40,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -150,11 +152,19 @@ public class ConversationList extends ListActivity implements
 	protected void onResume() {
 		super.onResume();
 
+		// Check that this is the default app. 4.4+ only
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+			setAppDefault();
+	}
+
+	/**
+	 * Check if the app is the default SMS app
+	 */
+	@TargetApi(19)
+	private void setAppDefault() {
 		final String myPackageName = getPackageName();
 		if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
-			// App is not default.
-			// Set up a button that allows the user to change the default SMS
-			// app
+			// Ask for changing the app to default
 			Intent intent = new Intent(
 					Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
 			intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,

@@ -26,7 +26,7 @@
 
     <uses-sdk
         android:maxSdkVersion="19"
-        android:minSdkVersion="19"
+        android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
